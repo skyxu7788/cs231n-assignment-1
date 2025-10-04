@@ -5,6 +5,18 @@ compile a LaTeX submission.
 
 ## Development environment
 
+We provide two development environments: (i) local and (ii) Colab environment. We recommend using a local environment with Azure cloud for GPU access.
+
+For the local environment, you need to use either `uv` or `conda` to set up your Python environment. For assignment notebooks that require **GPU**, you can use the Azure cloud VM (virtual machine) provided to you. The advantages of setting up your own environment are: (i) you can use your preferred IDE such as VSCode, and (ii) you can run basic test cases locally to help with debugging.
+
+For the Colab environment, you don't need to set up a Python environment since it's already configured, which can be convenient. For assignment notebooks that require **GPU**, you can change the Colab runtime type to GPU, though you may need to subscribe to Colab Pro. The main advantage of using Colab is the ease of environment setup. The disadvantages are: (i) editing and debugging code can be less convenient, and (ii) you may not be able to run basic test cases.
+
+GPU usage options are summarized as follows based on your environment setup choice:
+- Azure VM is available for those who chose the local environment setup
+- Colab with GPU runtime is available for those who chose the Colab environment (Note: Colab Pro subscription may be required)
+
+The followings describes how to setup the local environments:
+
 ### Local + `uv` (preferred)
 For assignment development, it is best if you work on a local environment with `uv` as your Python package manager. We also have legacy support for `conda`. If you wish to rely on `conda` [please follow setup instructions here](#option-2-using-conda-legacy).
 - [How to setup `uv`?](#option-1-using-uv-recommended)
@@ -74,11 +86,7 @@ conda deactivate
 
 ## What should I submit?
 
-Take a look at the problem set PDF for specific descriptions:
-
-- You will submit notebooks and associated python files in `src/submission` directory
-
-- Notebook contains inline questions, you will submit your answers using `written` sections in Gradescope.
+Take a look at the problem set PDF for *Submission Instructions* section.
 
 ### Running the autograder locally
 
