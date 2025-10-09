@@ -38,18 +38,8 @@ class Test_1(GradedTestCase):
         self.test_knn.train(self.X_train, self.y_train)
         self.sol_knn.train(self.X_train, self.y_train)
 
-    @graded()
-    def test_0(self):
-        """1-0-basic: two loops"""
-
-        np.random.seed(231)
-
-        # test
-        X_test = np.random.randn(20, 10)
-        test_out = self.test_knn.compute_distances_two_loops(X_test)
-        sol_out = self.sol_knn.compute_distances_two_loops(X_test)
-
-        self.assertTrue(np.allclose(test_out, sol_out), msg="Student generated distances for two loops knn doesn't match expected value")
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
     @graded()
     def test_1(self):
@@ -66,37 +56,11 @@ class Test_1(GradedTestCase):
             not if_function, msg="Do not use scipy or linalg anywhere in KNN!"
         )
 
-    @graded(is_hidden=True)
-    def test_2(self):
-        """1-2-hidden: prediction labels"""
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
-        np.random.seed(231)
-
-        # dists independent of other functions
-        dists = np.random.randn(20, 50)
-        sol_y_pred = self.sol_knn.predict_labels(dists)
-        test_y_pred = self.test_knn.predict_labels(dists)
-
-        self.assertTrue(
-            np.allclose(test_y_pred, sol_y_pred),
-            msg="Student generated predictions for two loops knn don't match expected values",
-        )
-
-    @graded(is_hidden=True)
-    def test_3(self):
-        """1-3-hidden: no loops"""
-
-        np.random.seed(231)
-
-        # test
-        X_test = np.random.randn(20, 10)
-        test_out = self.test_knn.compute_distances_no_loops(X_test)
-        sol_out = self.sol_knn.compute_distances_no_loops(X_test)
-
-        # TODO: check why nan occurs
-        # For now exclude nan
-        mask = ~(np.isnan(test_out) | np.isnan(sol_out))
-        self.assertTrue(np.allclose(test_out[mask], sol_out[mask]))
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
     @graded()
     def test_4(self):
@@ -136,79 +100,11 @@ class Test_2(GradedTestCase):
         self.X = np.random.randn(100, 50) * 256 - 128  # random images
         self.y = np.random.randint(10, size=(100))  # 100 images
 
-    @graded()
-    def test_0(self):
-        """2-0-basic: naive"""
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
-        test_loss_no_reg, test_grad_no_reg = submission.classifiers.softmax_loss_naive(self.W, self.X, self.y, 0.0)
-        test_loss_reg, test_grad_reg =  submission.classifiers.softmax.softmax_loss_naive(self.W, self.X, self.y, 5e1)
-        sol_loss_no_reg, sol_grad_no_reg = self.run_with_solution_if_possible(
-            submission,
-            lambda sub_or_sol: sub_or_sol.classifiers.softmax.softmax_loss_naive(self.W, self.X, self.y, 0.0),
-        )
-        sol_loss_reg, sol_grad_reg = self.run_with_solution_if_possible(
-            submission,
-            lambda sub_or_sol: sub_or_sol.classifiers.softmax.softmax_loss_naive(self.W, self.X, self.y, 5e1)
-        )
-
-        self.assertTrue(
-            np.allclose(test_loss_no_reg, sol_loss_no_reg, atol=1e-2, rtol=0), 
-            msg="Student generated loss with no regularization doesn't match the expected value"
-        )
-
-        self.assertTrue(
-            np.allclose(test_grad_no_reg, sol_grad_no_reg, atol=1e-2, rtol=0), 
-            msg="Student generated gradient with no regularization doesn't match the expected value"
-        )
-
-        self.assertTrue(
-            np.allclose(test_loss_reg, sol_loss_reg, atol=1e-2, rtol=0),
-            msg="Student generated loss with regularization doesn't match the expected value"
-        )
-
-        self.assertTrue(
-            np.allclose(test_grad_reg, sol_grad_reg, atol=1e-2, rtol=0),
-            msg="Student generated gradient with regularization doesn't match the expected value",
-        )
-
-    @graded(is_hidden=True)
-    def test_1(self):
-        """2-1-hidden: vectorized"""
-
-        test_loss_no_reg, test_grad_no_reg = submission.classifiers.softmax_loss_vectorized(self.W, self.X, self.y, 0.0)
-        test_loss_reg, test_grad_reg = submission.classifiers.softmax.softmax_loss_vectorized(self.W, self.X, self.y, 5e1)
-        sol_loss_no_reg, sol_grad_no_reg = self.run_with_solution_if_possible(
-            submission,
-            lambda sub_or_sol: sub_or_sol.classifiers.softmax.softmax_loss_vectorized(
-                self.W, self.X, self.y, 0.0
-            ),
-        )
-        sol_loss_reg, sol_grad_reg = self.run_with_solution_if_possible(
-            submission,
-            lambda sub_or_sol: sub_or_sol.classifiers.softmax.softmax_loss_vectorized(
-                self.W, self.X, self.y, 5e1
-            ),
-        )
-
-        self.assertTrue(
-            np.allclose(test_loss_no_reg, sol_loss_no_reg, atol=1e-2, rtol=0),
-            msg="Student generated loss with no regularization doesn't match the expected value",
-        )
-
-        self.assertTrue(
-            np.allclose(test_grad_no_reg, sol_grad_no_reg, atol=1e-2, rtol=0),
-            msg="Student generated gradient with no regularization doesn't match the expected value",
-        )
-
-        self.assertTrue(
-            np.allclose(test_loss_reg, sol_loss_reg, atol=1e-2, rtol=0),
-            msg="Student generated loss with regularization doesn't match the expected value",
-        )
-
-        self.assertTrue(
-            np.allclose(test_grad_reg, sol_grad_reg, atol=1e-2, rtol=0),
-            msg="Student generated gradient with regularization doesn't match the expected value",
-        )
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
     @graded()
     def test_2(self):
@@ -310,106 +206,20 @@ class Test_3(GradedTestCase):
             )
         )
 
-    @graded()
-    def test_0(self):
-        """3-0-basic: affine forward and backward"""
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
-        np.random.seed(231)
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
-        N, D1, D2, D3, M = 100, 2, 3, 4, 5
-        x = np.random.randn(N, D1, D2, D3)
-        w = np.random.randn(D1 * D2 * D3, M)
-        b = np.random.randn(M)
-        dout = np.random.randn(N, M)
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
-        out_sol, cache_sol = self.run_with_solution_if_possible(
-            submission, lambda sub_or_sol: sub_or_sol.layers.affine_forward(x, w, b)
-        )
-        out_sub, cache_sub = submission.layers.affine_forward(x, w, b)
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
-        dx_sol, dw_sol, db_sol = self.run_with_solution_if_possible(
-            submission,
-            lambda sub_or_sol: sub_or_sol.layers.affine_backward(dout, cache_sol),
-        )
-        dx_sub, dw_sub, db_sub = submission.layers.affine_backward(dout, cache_sub)
-
-        assert_allclose(out_sol, out_sub)
-        assert_allclose(dx_sol, dx_sub)
-        assert_allclose(dw_sol, dw_sub)
-        assert_allclose(db_sol, db_sub)
-
-    @graded()
-    def test_1(self):
-        """3-1-basic: ReLU forward and backward"""
-
-        np.random.seed(231)
-
-        N, D1, D2 = 100, 2, 3
-        x = np.random.randn(N, D1, D2)
-
-        out_sol, cache_sol = self.run_with_solution_if_possible(
-            submission, lambda sub_or_sol: sub_or_sol.layers.relu_forward(x)
-        )
-        out_sub, cache_sub = submission.layers.relu_forward(x)
-
-        dx_sol = self.run_with_solution_if_possible(
-            submission, lambda sub_or_sol: sub_or_sol.layers.relu_backward(x, cache_sol)
-        )
-        dx_sub = submission.layers.relu_backward(x, cache_sub)
-
-        assert_allclose(out_sol, out_sub)
-        assert_allclose(dx_sol, dx_sub)
-
-    @graded(is_hidden=True)
-    def test_2(self):
-        """3-2-hidden: Softmax"""
-
-        np.random.seed(231)
-
-        N, D1 = 100, 10
-        x = np.random.randn(N, D1)
-        y = np.random.randint(D1, size=(N))  # N images
-
-        out_sol, dx_sol = self.run_with_solution_if_possible(
-            submission, lambda sub_or_sol: sub_or_sol.layers.softmax_loss(x, y)
-        )
-        out_sub, dx_sub = submission.layers.softmax_loss(x, y)
-
-        assert_allclose(out_sol, out_sub)
-        assert_allclose(dx_sol, dx_sub)
-
-    @graded(is_hidden=True)
-    def test_3(self):
-        """3-3-hidden: Init Two Layers Neural Network"""
-
-        sol_keys = set(self.model_sol.params.keys())
-        sub_keys = set(self.model_sub.params.keys())
-        self.assertTrue(
-            sol_keys == sub_keys,
-            f"Missing or extra parameters! Expected {sol_keys}, got {sub_keys}.",
-        )
-        for key in self.model_sol.params.keys():
-            # Shape checks: we squeeze to
-            sol_param = self.model_sol.params[key]
-            sub_param = self.model_sub.params[key]
-            self.assertTrue(
-                sol_param.squeeze().shape == sub_param.squeeze().shape,
-                f"Incorrect shape for {key}. Expected {sol_param.shape}, got"
-                " {sub_param.shape} instead.",
-            )
-
-    @graded(is_hidden=True)
-    def test_4(self):
-        """3-4-hidden: Two Layers Neural Network forward"""
-        assert_allclose(self.scores_sol, self.scores_sub)
-
-    @graded(is_hidden=True)
-    def test_5(self):
-        """3-5-hidden: Two Layers Neural Network backward"""
-        assert_allclose(self.loss_sol, self.loss_sub)
-        self.assertTrue(set(self.grads_sol.keys()) == set(self.grads_sub.keys()))
-        for key in self.grads_sol.keys():
-            assert_allclose(self.grads_sol[key], self.grads_sub[key])
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
     @graded()
     def test_6(self):
@@ -504,85 +314,8 @@ class Test_5(GradedTestCase):
         self.test_accuracy = float(acc_string[-1].split(" ")[-1])
         self.val_accuracy = float(acc_string[-2].split(" ")[-1])
 
-    @graded()
-    def test_0(self):
-        """5-0-basic: initialization"""
-        sol_keys = set(self.model_sol.params.keys())
-        sub_keys = set(self.model_sub.params.keys())
-        self.assertTrue(
-            sol_keys == sub_keys,
-            f"Missing or extra parameters! Expected {sol_keys}, got {sub_keys}.",
-        )
-        for key in self.model_sol.params.keys():
-            # Shape checks: we squeeze to
-            sol_param = self.model_sol.params[key]
-            sub_param = self.model_sub.params[key]
-            self.assertTrue(
-                sol_param.squeeze().shape == sub_param.squeeze().shape,
-                f"Incorrect shape for {key}. Expected {sol_param.shape}, got"
-                f" {sub_param.shape} instead.",
-            )
-
-    @graded()
-    def test_1(self):
-        """5-1-basic: forward"""
-        assert_allclose(self.scores_sol, self.scores_sub)
-
-    @graded(is_hidden=True)
-    def test_2(self):
-        """5-2-hidden: backward"""
-        assert_allclose(self.loss_sol, self.loss_sub)
-        self.assertTrue(set(self.grads_sol.keys()) == set(self.grads_sub.keys()))
-        for key in self.grads_sol.keys():
-            assert_allclose(self.grads_sol[key], self.grads_sub[key])
-
-    def gen(self):
-
-        N, D = 4, 5
-
-        np.random.seed(50)
-        w = np.linspace(-0.4, 0.6, num=N * D).reshape(N, D)
-        dw = np.linspace(-0.6, 0.4, num=N * D).reshape(N, D)
-        m = np.linspace(0.6, 0.9, num=N * D).reshape(N, D)
-        v = np.linspace(0.7, 0.5, num=N * D).reshape(N, D)
-        config = {"learning_rate": 1e-2, "m": m, "v": v, "t": 5}
-        return w, dw, m, v, config
-
-    @graded(is_hidden=True)
-    def test_3(self):
-        """5-3-hidden: SGD with momentum"""
-        w, dw, m, v, config = self.gen()
-
-        next_w_sol, _ = self.run_with_solution_if_possible(
-            submission,
-            lambda sub_or_sol: sub_or_sol.sgd_momentum(w, dw, config)
-        )
-        w, dw, m, v, config = self.gen()
-        next_w_sub, _ = submission.sgd_momentum(w, dw, config)
-        assert_allclose(next_w_sol, next_w_sub)
-
-    @graded(is_hidden=True)
-    def test_4(self):
-        """5-4-hidden: RMSProp"""
-        w, dw, m, v, config = self.gen()
-
-        next_w_sol, _ = self.run_with_solution_if_possible(
-            submission, lambda sub_or_sol: sub_or_sol.rmsprop(w, dw, config)
-        )
-        w, dw, m, v, config = self.gen()
-        next_w_sub, _ = submission.rmsprop(w, dw, config)
-        assert_allclose(next_w_sol, next_w_sub)
-
-    @graded(is_hidden=True)
-    def test_5(self):
-        """5-5-hidden: ADAM"""
-        w, dw, m, v, config = self.gen()
-        next_w_sol, _ = self.run_with_solution_if_possible(
-            submission, lambda sub_or_sol: sub_or_sol.adam(w, dw, config)
-        )
-        w, dw, m, v, config = self.gen()
-        next_w_sub, _ = submission.adam(w, dw, config)
-        assert_allclose(next_w_sol, next_w_sub)
+    ### BEGIN_HIDE ###
+    ### END_HIDE ###
 
     @graded()
     def test_6(self):
