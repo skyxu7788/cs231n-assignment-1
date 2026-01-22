@@ -303,16 +303,21 @@ class Test_5(GradedTestCase):
         self.model_sol.params = model_sol_params
 
         # Accuracies
-
-        acc_string = text_in_cell(
-            os.path.join(
-                os.path.dirname(__file__),
-                "./submission/FullyConnectedNets.ipynb",
-            ),
-            "val_test_accuracy",
-        )
-        self.test_accuracy = float(acc_string[-1].split(" ")[-1])
-        self.val_accuracy = float(acc_string[-2].split(" ")[-1])
+        try:
+            acc_string = text_in_cell(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "./submission/FullyConnectedNets.ipynb",
+                ),
+                "val_test_accuracy",
+            )
+            self.test_accuracy = float(acc_string[-1].split(" ")[-1])
+            self.val_accuracy = float(acc_string[-2].split(" ")[-1])
+        
+        except:
+            self.test_accuracy = -1
+            self.val_accuracy = -1
+        
 
     ### BEGIN_HIDE ###
     ### END_HIDE ###
