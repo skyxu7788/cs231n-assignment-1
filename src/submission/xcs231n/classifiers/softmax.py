@@ -16,6 +16,7 @@ def softmax_loss_naive(W, X, y, reg):
     - X: A numpy array of shape (N, D) containing a minibatch of data.
     - y: A numpy array of shape (N,) containing training labels; y[i] = c means
       that X[i] has label c, where 0 <= c < C.
+    #   y[i] is the column index of the correct class for row i (example i).
     - reg: (float) regularization strength
 
     Returns a tuple of:
@@ -30,6 +31,7 @@ def softmax_loss_naive(W, X, y, reg):
     num_classes = W.shape[1]
     num_train = X.shape[0]
     for i in range(num_train):
+        # shape (C)
         scores = X[i].dot(W)
 
         # compute the probabilities in numerically stable way
@@ -41,12 +43,15 @@ def softmax_loss_naive(W, X, y, reg):
         loss -= logp[y[i]]  # negative log probability is the loss
 
         # ### START CODE HERE ###
+        for j in range(num_classes):
+            dW[:,j] += p[j] * X[i]
+            # (D,) += (C) * (D,), X[i] is a row vector of lenth D (one example's features)
         # ### END CODE HERE ###
 
     # normalized hinge loss plus regularization
     loss = loss / num_train + reg * np.sum(W * W)
 
-    #############################################################################
+    #############################################num###############################
     # TODO:                                                                     #
     # Compute the gradient of the loss function and store it dW.                #
     # Rather that first computing the loss and then computing the derivative,   #
@@ -55,6 +60,10 @@ def softmax_loss_naive(W, X, y, reg):
     # code above to compute the gradient.                                       #
     #############################################################################
     # ### START CODE HERE ###
+
+    dW += 2*reg*W
+
+            
     # ### END CODE HERE ###
 
     return loss, dW
@@ -66,6 +75,9 @@ def softmax_loss_vectorized(W, X, y, reg):
 
     Inputs and outputs are the same as softmax_loss_naive.
     """
+    # - W: A numpy array of shape (D, C) containing weights.
+    # - X: A numpy array of shape (N, D) containing a minibatch of data.
+    # - y: A numpy array of shape (N,) containing training labels; y[i] = c means
     # Initialize the loss and gradient to zero.
     loss = 0.0
     dW = np.zeros_like(W)
@@ -76,6 +88,20 @@ def softmax_loss_vectorized(W, X, y, reg):
     # result in loss.                                                           #
     #############################################################################
     # ### START CODE HERE ###
+    # (N,C)
+    scores = X @ W 
+    scores -= np.max(scores, axis=1, keepdims=True)
+    N = X.shape[0]
+    p = np.exp(scores)
+    p /= np.sum(p, axis=1, keepdims=True)
+    # get the score in row x (training data's example x) that matches with y[x](correct label for the xth example of data)
+    #  for each row, find the element(score) that matches the y, y is an array of indexes for label
+# p[arrX, arrY], arrX is the row we want to use arrY to index into, hence shape of p[arrX, arrY] is num of rows in the matix being performed indexing
+    score_correct_label = p[np.arange(N),y]
+    # print('shape of feature correct label %f', score_correct_label.shape)
+    loss = -np.sum(np.log(score_correct_label))/N
+    loss += reg * np.sum(W*W)
+   
     # ### END CODE HERE ###
 
     #############################################################################
@@ -88,6 +114,14 @@ def softmax_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # ### START CODE HERE ###
+    # derivatives of loss with respoect to each class score
+    dScores = p.copy()
+    # one hot target: correct class probability should be 1, otehr is 0 
+    # dScores = p - target, only correct class score gradient in each example -1
+    dScores[np.arange(N), y] -= 1
+    dScores /= N
+    dW = np.transpose(X) @ dScores
+    dW += 2*reg*W
     # ### END CODE HERE ###
 
     return loss, dW

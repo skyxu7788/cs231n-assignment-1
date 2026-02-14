@@ -1,0 +1,4 @@
+{
+  "jupyter.notebookFileRoot": "${workspaceFolder}/src/submission",
+  "python.REPL.enableREPLSmartSend": false
+}

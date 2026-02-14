@@ -88,7 +88,11 @@ def hog_feature(im):
       feat: Histogram of Gradient (HOG) feature
 
     """
+# From gx and gy, HOG computes:
 
+# (gx): magnitude (how strong edge is) right neighbor difference -> horizontal change 
+# (gy) orientation (which way edge points) down neighbor difference -> vertical change 
+#
     # convert rgb to grayscale if needed
     if im.ndim == 3:
         image = rgb2gray(im)
@@ -98,7 +102,7 @@ def hog_feature(im):
     sx, sy = image.shape  # image size
     orientations = 9  # number of gradient bins
     cx, cy = (8, 8)  # pixels per cell
-
+    # print(image.shape) is 32
     gx = np.zeros(image.shape)
     gy = np.zeros(image.shape)
     gx[:, :-1] = np.diff(image, n=1, axis=1)  # compute gradient on x-direction
