@@ -27,6 +27,9 @@ def affine_forward(x, w, b):
     # will need to reshape the input into rows.                               #
     ###########################################################################
     # ### START CODE HERE ###
+    # reshape(, -1) means how many cols are needed if collapse the rest(shape: (N,D))
+    x_row = x.reshape(x.shape[0], -1)
+    out = x_row @ w + b
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -57,6 +60,11 @@ def affine_backward(dout, cache):
     # TODO: Implement the affine backward pass.                               #
     ###########################################################################
     # ### START CODE HERE ###
+    x_row = x.reshape(x.shape[0], -1)
+    db = np.sum(dout, axis = 0)
+    dw = x_row.T @ dout
+    dxr = dout @ w.T
+    dx = dxr.reshape(x.shape)
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -80,6 +88,7 @@ def relu_forward(x):
     # TODO: Implement the ReLU forward pass.                                  #
     ###########################################################################
     # ### START CODE HERE ###
+    out = np.maximum(0,x)
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -104,6 +113,10 @@ def relu_backward(dout, cache):
     # TODO: Implement the ReLU backward pass.                                 #
     ###########################################################################
     # ### START CODE HERE ###
+    # applying the ReLU derivative mask to upstream gradients.
+    # (x > 0): boolean mask from forward input x
+    # if x[i] > 0, dx[i] = dout[i] pass gradient through only where the neuron was active
+    dx = dout * (x>0)
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -736,11 +749,24 @@ def softmax_loss(x, y):
     - dx: Gradient of the loss with respect to x
     """
     loss, dx = None, None
-
     ###########################################################################
     # TODO: Copy over your solution from A1.
     ###########################################################################
     # ### START CODE HERE ###
+    # this is just to avoid overflow from large scores, softmax probability stay the same when add/subtract the same constant from all class scores in a row
+    shifted_logits = x - np.max(x, axis=1, keepdims=True)
+    total_expLogits = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
+    # logs of each class probability
+    log_probs = shifted_logits - np.log(total_expLogits)
+    # each row of probs sum to 1
+    probs = np.exp(log_probs)
+    N = x.shape[0]
+
+    loss = -np.sum(log_probs[np.arange(N), y]) / N
+
+    dx = probs.copy()
+    dx[np.arange(N), y] -= 1
+    dx /= N
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
