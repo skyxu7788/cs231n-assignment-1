@@ -116,8 +116,8 @@ def softmax_loss_vectorized(W, X, y, reg):
     # ### START CODE HERE ###
     # derivatives of loss with respoect to each class score
     dScores = p.copy()
-    # one hot target: correct class probability should be 1, otehr is 0 
-    # dScores = p - target, only correct class score gradient in each example -1
+    # one hot target: 1 for correct class, 0 for incorrect
+    # dScores = p - target, only correct class score gradient in each example - 1
     dScores[np.arange(N), y] -= 1
     dScores /= N
     dW = np.transpose(X) @ dScores

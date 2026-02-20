@@ -151,3 +151,52 @@ def adam(w, dw, config=None):
     ###########################################################################
 
     return next_w, config
+
+
+def adamw(w, dw, config=None):
+    """
+    Uses AdamW update rule (decoupled weight decay).
+
+    config format:
+    - learning_rate: Scalar learning rate.
+    - beta1: Decay rate for moving average of first moment of gradient.
+    - beta2: Decay rate for moving average of second moment of gradient.
+    - epsilon: Small scalar used for smoothing to avoid dividing by zero.
+    - weight_decay: Decoupled weight decay strength.
+    - m: Moving average of gradient.
+    - v: Moving average of squared gradient.
+    - t: Iteration number.
+    """
+    if config is None:
+        config = {}
+    config.setdefault("learning_rate", 1e-3)
+    config.setdefault("beta1", 0.9)
+    config.setdefault("beta2", 0.999)
+    config.setdefault("epsilon", 1e-8)
+    config.setdefault("weight_decay", 1e-2)
+    config.setdefault("m", np.zeros_like(w))
+    config.setdefault("v", np.zeros_like(w))
+    config.setdefault("t", 0)
+
+    lr = config["learning_rate"]
+    beta1 = config["beta1"]
+    beta2 = config["beta2"]
+    eps = config["epsilon"]
+    wd = config["weight_decay"]
+    m = config["m"]
+    v = config["v"]
+    t = config["t"] + 1
+
+    m = beta1 * m + (1 - beta1) * dw
+    v = beta2 * v + (1 - beta2) * (dw * dw)
+    m_unbias = m / (1 - beta1**t)
+    v_unbias = v / (1 - beta2**t)
+
+    next_w = w - lr * (m_unbias / (np.sqrt(v_unbias) + eps))
+    next_w -= lr * wd * w
+
+    config["m"] = m
+    config["v"] = v
+    config["t"] = t
+
+    return next_w, config

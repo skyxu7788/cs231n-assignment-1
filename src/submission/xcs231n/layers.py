@@ -401,6 +401,7 @@ def dropout_forward(x, dropout_param):
         # Store the dropout mask in the mask variable.                        #
         #######################################################################
         # ### START CODE HERE ###
+        
         # ### END CODE HERE ###
         #######################################################################
         #                           END OF YOUR CODE                          #
@@ -757,11 +758,12 @@ def softmax_loss(x, y):
     shifted_logits = x - np.max(x, axis=1, keepdims=True)
     total_expLogits = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
     # logs of each class probability
+    # probs of each class of each sample = exp of shifted logits / z, log probs for each class of each sample = log(exp of shifted logits / z) = shifted_logits - np.log(total_expLogits)
     log_probs = shifted_logits - np.log(total_expLogits)
     # each row of probs sum to 1
     probs = np.exp(log_probs)
     N = x.shape[0]
-
+# log_probs[correct class] for each sample
     loss = -np.sum(log_probs[np.arange(N), y]) / N
 
     dx = probs.copy()
