@@ -68,6 +68,10 @@ def sgd_momentum(w, dw, config=None):
     # the next_w variable. You should also use and update the velocity v.     #
     ###########################################################################
     # ### START CODE HERE ###
+    momentum = config["momentum"]
+    lr = config["learning_rate"]
+    v = momentum * v + dw
+    next_w = w - lr *v
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -103,6 +107,8 @@ def rmsprop(w, dw, config=None):
     # config['cache'].                                                        #
     ###########################################################################
     # ### START CODE HERE ###
+    config["cache"] = config["decay_rate"] * config["cache"] + (1-config["decay_rate"])*dw*dw
+    next_w = w - config["learning_rate"] * dw/(np.sqrt(config["cache"]) + config["epsilon"])
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -145,6 +151,13 @@ def adam(w, dw, config=None):
     # using it in any calculations.                                           #
     ###########################################################################
     # ### START CODE HERE ###
+    config["m"] = config["m"] * config["beta1"] + (1-config["beta1"])*dw
+    config["v"] = config["v"] * config["beta2"] + (1-config["beta2"])*dw*dw
+    config["t"] += 1
+    m_unbias = config["m"] / (1-config["beta1"]**config["t"])
+    v_unbias = config["v"] / (1-config["beta2"]**config["t"])
+    next_w = w - config["learning_rate"]*m_unbias/(np.sqrt(v_unbias)+config["epsilon"])
+
     # ### END CODE HERE ###
     ###########################################################################
     #                             END OF YOUR CODE                            #
